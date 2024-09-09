@@ -4,37 +4,36 @@
  * @author Abhi Gundrala
  * @author Edward A. Lee
  */
- target C {
-    platform: {
-      name: "rp2040",
-      board: "pololu_3pi_2040_robot"
-    },
-    single-threaded: true
-  }
-  
-  preamble {=
-    #include <stdio.h>
-    #include <pico/stdlib.h>
-    #include <hardware/gpio.h>
-  =}
-  
-  main reactor {
-    timer t_on(0, 500 ms)
-    timer t_off(250 ms, 500 ms)
-  
-    reaction(startup) {=
-      gpio_init(PICO_DEFAULT_LED_PIN);
-      gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    =}
-  
-    reaction(t_on) {=
-      printf("LED State: %b\n", true);
-      gpio_put(PICO_DEFAULT_LED_PIN, true);
-    =}
+target C {
+  platform: {
+    name: "rp2040",
+    board: "pololu_3pi_2040_robot"
+  },
+  single-threaded: true
+}
 
-    reaction(t_off) {=
-        printf("LED State: %b\n", false);
-        gpio_put(PICO_DEFAULT_LED_PIN, false);
-    =}
-  }
-  
+preamble {=
+  #include <stdio.h>
+  #include <pico/stdlib.h>
+  #include <hardware/gpio.h>
+=}
+
+main reactor {
+  timer t_on(0, 500 ms)
+  timer t_off(250 ms, 500 ms)
+
+  reaction(startup) {=
+    gpio_init(PICO_DEFAULT_LED_PIN);
+    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+  =}
+
+  reaction(t_on) {=
+    printf("LED State: %b\n", true);
+    gpio_put(PICO_DEFAULT_LED_PIN, true);
+  =}
+
+  reaction(t_off) {=
+    printf("LED State: %b\n", false);
+    gpio_put(PICO_DEFAULT_LED_PIN, false);
+  =}
+}

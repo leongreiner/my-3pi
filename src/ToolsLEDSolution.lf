@@ -1,0 +1,25 @@
+target C {
+    platform: {
+      name: "rp2040",
+      board: "pololu_3pi_2040_robot"
+    },
+    single-threaded: true
+  }
+  
+import LED from "lib/LED.lf"
+
+main reactor {
+    timer t_on(0, 500 ms)
+    timer t_off(250 ms, 500ms)
+    led = new LED()
+
+    reaction(t_on) -> led.set {=
+        printf("LED State: %b\n", true);
+        lf_set(led.set, true);
+      =}
+  
+      reaction(t_off) -> led.set {=
+          printf("LED State: %b\n", false);
+          lf_set(led.set, false);
+        =}
+}

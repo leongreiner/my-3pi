@@ -21,6 +21,7 @@ target C {
 preamble {=
   #include <pico/stdlib.h>
   #include <imu.h>
+  #include <math.h>
 =}
 
 /** Base class for IMU reactors. */
@@ -62,6 +63,22 @@ reactor Accelerometer extends IMUBase {
         lf_set(x, acc_data.x);
         lf_set(y, acc_data.y);
         lf_set(z, acc_data.z);
+  =}
+}
+
+reactor Tilt {
+  input x: float
+  input y: float
+  input z: float
+  output pitch: float
+  output roll: float
+
+  reaction(x, y, z) -> pitch, roll {=
+    float result_pitch = atan(x->value / sqrt((y->value * y->value) + (z->value * z->value)));
+    lf_set(pitch, result_pitch * 180 / M_PI);
+
+    float result_roll = atan(y->value / sqrt((x->value * x->value) + (z->value * z->value)));
+    lf_set(roll, result_roll * 180 / M_PI);
   =}
 }
 
